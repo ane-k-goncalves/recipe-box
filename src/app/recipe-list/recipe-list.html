@@ -1,0 +1,47 @@
+<div class="flex flex-col md:flex-row max-w-6xl mx-auto my-8 gap-8 p-4 font-sans">
+  <!-- Sidebar Menu -->
+  <aside class="w-full md:w-80 bg-base-200 p-6 rounded-2xl shadow-sm border border-base-300">
+    <h2 class="text-2xl font-bold mb-6 text-base-content flex items-center gap-2">
+      📖 Minhas Receitas
+    </h2>
+    
+    <!-- Search Box -->
+    <div class="relative w-full mb-6">
+      <input 
+        type="text" 
+        placeholder="Buscar receita..." 
+        [ngModel]="searchTerm()" 
+        (ngModelChange)="searchTerm.set($event)" 
+        class="input input-bordered w-full pr-10 focus:input-primary transition-all duration-300"
+      />
+      <span class="absolute inset-y-0 right-3 flex items-center text-base-content/40">
+        🔍
+      </span>
+    </div>
+
+    <!-- Menu List -->
+    <ul class="menu w-full p-0 gap-2">
+      @for (recipe of filteredRecipes(); track recipe.id) {
+        <li>
+          <a 
+            [routerLink]="['/recipes', recipe.id]"
+            routerLinkActive="active"
+            class="flex justify-between items-center py-3 px-4 rounded-xl transition-all duration-200 hover:bg-base-300"
+          >
+            <span class="font-medium">{{ recipe.name }}</span>
+            @if (recipe.isFavorite) {
+              <span class="text-warning text-lg animate-pulse">★</span>
+            }
+          </a>
+        </li>
+      } @empty {
+        <li class="text-center text-base-content/50 py-4">Nenhuma receita encontrada</li>
+      }
+    </ul>
+  </aside>
+
+  <!-- Recipe Details (Renderizado por Rotas Filhas) -->
+  <main class="flex-1">
+    <router-outlet></router-outlet>
+  </main>
+</div>

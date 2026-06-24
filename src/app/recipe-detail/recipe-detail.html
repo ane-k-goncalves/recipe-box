@@ -1,0 +1,62 @@
+@if (recipe(); as currentRecipe) {
+  <div class="card bg-base-100 shadow-xl border border-base-200 overflow-hidden rounded-2xl transition-all duration-300 hover:shadow-2xl">
+    <!-- Recipe Hero Image -->
+    <figure class="relative h-72 w-full overflow-hidden">
+      <img 
+        [src]="currentRecipe.imgUrl" 
+        [alt]="currentRecipe.name" 
+        class="w-full h-full object-cover transition-transform duration-700 hover:scale-105" 
+      />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
+      <div class="absolute bottom-6 left-6 text-white">
+        <h1 class="text-4xl font-extrabold tracking-tight drop-shadow-md">{{ currentRecipe.name }}</h1>
+      </div>
+    </figure>
+
+    <!-- Recipe Body -->
+    <div class="card-body p-8">
+      <div class="flex flex-wrap items-center gap-4 mb-6">
+        <!-- Difficulty Badge -->
+        <div class="badge badge-lg border-base-300 bg-base-200 py-4 px-4 font-bold shadow-sm">
+          Dificuldade: <span class="ml-2 font-extrabold text-primary">{{ currentRecipe.difficulty | difficulty }}</span>
+        </div>
+      </div>
+
+      <p class="text-lg text-base-content/70 italic leading-relaxed mb-6">{{ currentRecipe.description }}</p>
+
+      <!-- Servings Adjuster -->
+      <div class="flex items-center gap-4 bg-base-200 p-4 rounded-xl mb-6 w-fit border border-base-300 shadow-inner">
+        <span class="font-bold text-sm uppercase tracking-wider text-base-content/60">Porções:</span>
+        <div class="join">
+          <button (click)="decrementServings()" class="btn btn-sm join-item btn-ghost hover:btn-active">-</button>
+          <span class="btn btn-sm join-item btn-active no-animation pointer-events-none px-4 font-extrabold text-primary">
+            {{ servings() }}
+          </span>
+          <button (click)="incrementServings()" class="btn btn-sm join-item btn-ghost hover:btn-active">+</button>
+        </div>
+      </div>
+
+      <!-- Ingredients -->
+      <div class="divider"></div>
+      <h3 class="text-xl font-bold mb-4 text-base-content/80">🛒 Ingredientes Necessários</h3>
+      
+      <div class="bg-base-200 rounded-2xl p-6 border border-base-300">
+        <ul class="flex flex-col gap-3">
+          @for (ing of adjustedIngredients(); track ing.name) {
+            <li class="flex items-center justify-between py-2 border-b border-base-300 last:border-0">
+              <span class="font-medium text-base-content/80">{{ ing.name }}</span>
+              <div class="badge badge-primary badge-outline gap-1 font-bold p-3">
+                <span>{{ ing.quantity }}</span>
+                <span class="text-xs font-normal opacity-80">{{ ing.unit }}</span>
+              </div>
+            </li>
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+} @else {
+  <div class="card bg-base-100 border border-base-300 p-12 text-center rounded-2xl shadow-sm">
+    <p class="text-lg text-base-content/60">Carregando detalhes da receita...</p>
+  </div>
+}
